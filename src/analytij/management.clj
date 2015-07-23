@@ -17,7 +17,7 @@
     (.build credential)))
 
 
-(defn- service
+(defn service
   [account-id private-key-file]
   (let [creds (service-credentials account-id private-key-file)
         analytics (doto
@@ -26,21 +26,34 @@
                     (.setHttpRequestInitializer creds))]
     (.build analytics)))
 
-
 (defn- to-stream
   [csv]
   (let [file (io/file csv)
         file-input-stream (io/input-stream file)
         media-content (InputStreamContent. "application/octet-stream" file-input-stream)]
-    (.setLength media-content (.length file))
-    media-content))
+    (doto media-content (.setLength (.length file)))))
+
+(defn upload-response->map [response]
+  {:account-id     (.getAccountId response)
+   :data-source-id (.getCustomDataSourceId response)
+   :id             (.getId response)
+   :status         (.getStatus response)})
 
 (defn upload-data
-  [account-id property-id custom-data-source-id private-key-file cost-data-file]
-  (let [analytics   (service account-id private-key-file)
-        cost-data   (to-stream cost-data-file)
-        management  (.management analytics)
+  [analytics-service account-id property-id custom-data-source-id cost-data-file]
+  (let [cost-data   (to-stream cost-data-file)
+        management  (.management analytics-service)
         uploads     (.uploads management)
         request     (.uploadData uploads account-id property-id custom-data-source-id cost-data)
         response    (.execute request)]
-    (println response)))
+    (upload-response->map response)))
+
+(defn upload-status->map [status]
+  {:status         (.getStatus status)
+   :account-id     (.getAccountId status)
+   :data-source-id (.getCustomDataSourceId status)
+   :id             (.getId status)})
+
+(defn upload-status [analytics-service account-id property-id data-source-id upload-id]
+  (let [uploads (.. analytics-service management uploads)]
+    (upload-status->map (.execute (.get uploads account-id property-id data-source-id upload-id)))))
