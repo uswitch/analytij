@@ -1,4 +1,4 @@
-(defproject analytij "0.1.0-SNAPSHOT"
+(defproject analytij "0.1.0"
   :description "Clojure client to interact with Google Analytics API"
   :url "https://github.com/uswitch/analytij"
   :license {:name "Eclipse Public License"
