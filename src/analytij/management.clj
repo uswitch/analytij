@@ -2,7 +2,8 @@
   (:import [com.google.api.client.googleapis.auth.oauth2 GoogleCredential$Builder]
            [com.google.api.client.googleapis.javanet GoogleNetHttpTransport]
            [com.google.api.client.json.jackson2 JacksonFactory]
-           [com.google.api.services.analytics AnalyticsScopes Analytics$Builder])
+           [com.google.api.services.analytics AnalyticsScopes Analytics$Builder]
+           [com.google.api.client.http InputStreamContent])
   (:require [clojure.java.io :as io]))
 
 (defn- service-credentials
@@ -31,7 +32,7 @@
   (let [file (io/file csv)
         file-input-stream (io/input-stream file)
         media-content (InputStreamContent. "application/octet-stream" file-input-stream)]
-    (doto media-content (.setLength (.length file)))
+    (.setLength media-content (.length file))
     media-content))
 
 (defn upload-data
@@ -40,6 +41,6 @@
         cost-data   (to-stream cost-data-file)
         management  (.management analytics)
         uploads     (.uploads management)
-        request     (doto uploads (.uploadData account-id property-id custom-data-source-id cost-data))
+        request     (.uploadData uploads account-id property-id custom-data-source-id cost-data)
         response    (.execute request)]
     (println response)))
