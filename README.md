@@ -27,9 +27,9 @@ See [Service Accounts](https://github.com/rockBreaker/analytij/tree/readme#servi
 REPL
 
 ```clojure
- ;; 8 numbers
-(def account-id "XXXXXXXX")  
- ;; Mine was 2 letters and 9 numbers 
+ ;; example account id : 8 numbers
+(def acc-id "XXXXXXXX")  
+ ;; example property id: 2 letters and 9 numbers 
 (def property-id "LL-XXXXXXXX-X") 
  ;; example custom data source id 
 (def custom-data-source-id "vISHq_PRQSu1Te4FUE2g6A")
@@ -39,7 +39,7 @@ REPL
 (def analytics-service (service account-id "pathToPrivateKeyFile"))
 
 ;; How to upload data
-(upload-data analytics-service account-id property-id custom-data-source-id c-data-file) 
+(upload-data analytics-service acc-id property-id custom-data-source-id c-data-file) 
 => Returns response map. :TODO get results from REPL.
 
 ;; How to check on upload progress.
@@ -47,7 +47,7 @@ REPL
 (def upload-id (:id response-map))
 
 (upload-status analytics-service account-id property-id data-source-id upload-id)
-=> Returns upload status. :TODO get results from REPL.]
+=> Returns upload status. :TODO get results from REPL.
 
 ```
 
