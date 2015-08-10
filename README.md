@@ -9,7 +9,7 @@ Current functionality
 
 ## Usage
 
-You need a [service account](https://developers.google.com/console/help/?csw=1#service_accounts) to use this lib.
+You need a [service account](https://developers.google.com/console/help/?csw=1#service_accounts) to use analytij.
  
 Instructions copied from [legato](https://github.com/tpitale/legato/wiki/OAuth2-and-Google#service-accounts
 
@@ -21,7 +21,7 @@ Instructions copied from [legato](https://github.com/tpitale/legato/wiki/OAuth2-
 
 * Go to the [Google API Console](https://code.google.com/apis/console/)
 * Create a new Project and name it accordingly
-* Turn on the **Google Analytics** access
+* Turn on the **Analytics API** access
 * Click **API Access** in the left column
 * Click **Create an OAuth**
     * Enter a product name, and add an optional logo
