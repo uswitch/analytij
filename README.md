@@ -29,10 +29,13 @@ REPL
 ```clojure
  ;; example account id : 8 numbers
 (def acc-id "XXXXXXXX")  
+
  ;; example property id: 2 letters and 9 numbers 
 (def property-id "LL-XXXXXXXX-X") 
+
  ;; example custom data source id 
 (def custom-data-source-id "vISHq_PRQSu1Te4FUE2g6A")
+
  ;; cost data file
 (def c-data-file "pathToCostData.csv")
 
