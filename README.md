@@ -30,7 +30,7 @@ REPL
 
 (def account-id "XXXXXXXX")  ;; 8 numbers
 (def property-id "LL-XXXXXXXX-X") ;; Mine was 2 letters and 9 numbers  
-(def custom-data-source-id "vISHq_PRQSu1Te4FUE2g6A") ;; This is an example custom-data-source-id 
+(def custom-data-source-id "vISHq_PRQSu1Te4FUE2g6A") ;; real example 
 (def cost-data-file "pathToCostData.csv")
 
 (def analytics-service (service account-id "pathToPrivateKeyFile"))
@@ -43,7 +43,7 @@ REPL
 ;; You need the above response map :TODO get it. 
 (def upload-id (:id response-map))
 
-(upload-status analytics-service account-id property-id data-source-id upload-i)
+(upload-status analytics-service account-id property-id data-source-id upload-id)
 => Returns upload status. :TODO get results from REPL.]
 
 ```
