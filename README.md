@@ -1,6 +1,7 @@
 # analytij
 
-A Clojure wrapper around the https://developers.google.com/analytics/ SDK. 
+Clojure library to ease interacting with the Google Analytics API. It is built upon [Google's Analytics API Java Client Library](https://developers.google.com/api-client-library/java/apis/analytics/v3).
+
 Current [version](http://mvnrepository.com/artifact/com.google.apis/google-api-services-analytics/v3-rev116-1.20.0)
 
 Current functionality 
@@ -15,11 +16,11 @@ Instructions copied/inspired from [legato](https://github.com/tpitale/legato/wik
 
 #Terminology
 - *G.A*                    - [Google analytics](https://www.google.co.uk/analytics/)
-- *analytics-service*      - This is created by the function service. 
+- *analytics-service*      - This is created by the service fn. 
 - *account-id*             - This is your google analytics account id (you can see this in Account Settings in G.A)
 - *property-id*            - This is the property id listed inside G.A admin tab when you click on the property you want. 
 - *custom-data-source-id*  - This is created when you click on Data import in the property section
-= *cost-data-file*         - This is your csv file containing your cost data.
+- *cost-data-file*         - This is your csv file containing your cost data.
 
 # Service Accounts
 
