@@ -27,16 +27,19 @@ See [Service Accounts](https://github.com/rockBreaker/analytij/tree/readme#servi
 REPL
 
 ```clojure
-
-(def account-id "XXXXXXXX")  ;; 8 numbers
-(def property-id "LL-XXXXXXXX-X") ;; Mine was 2 letters and 9 numbers  
-(def custom-data-source-id "vISHq_PRQSu1Te4FUE2g6A") ;; real example 
-(def cost-data-file "pathToCostData.csv")
+ ;; 8 numbers
+(def account-id "XXXXXXXX")  
+ ;; Mine was 2 letters and 9 numbers 
+(def property-id "LL-XXXXXXXX-X") 
+ ;; example custom data source id 
+(def custom-data-source-id "vISHq_PRQSu1Te4FUE2g6A")
+ ;; cost data file
+(def c-data-file "pathToCostData.csv")
 
 (def analytics-service (service account-id "pathToPrivateKeyFile"))
 
 ;; How to upload data
-(upload-data analytics-service account-id property-id custom-data-source-id cost-data-file) 
+(upload-data analytics-service account-id property-id custom-data-source-id c-data-file) 
 => Returns response map. :TODO get results from REPL.
 
 ;; How to check on upload progress.
