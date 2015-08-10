@@ -5,8 +5,8 @@ Clojure library to ease interacting with the Google Analytics API. It is built u
 Current [version](http://mvnrepository.com/artifact/com.google.apis/google-api-services-analytics/v3-rev116-1.20.0)
 
 Current functionality 
-- Upload cost data csv to an account/property/custom-data-source
-- See upload status of a csv
+- Upload cost data csv to an Google analytics account with an existing property. Property must have a view with a custom-data-source associated with it.
+- See upload status of a csv given you know the account-id, property-id, data-source-id and upload-id.
 
 ## Usage
 
