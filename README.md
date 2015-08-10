@@ -11,11 +11,11 @@ Current functionality
 
 You need a [service account](https://developers.google.com/console/help/?csw=1#service_accounts) to use this lib.
  
-Instructions copied from [legato] (https://github.com/tpitale/legato/wiki/OAuth2-and-Google#service-accounts
+Instructions copied from [legato](https://github.com/tpitale/legato/wiki/OAuth2-and-Google#service-accounts
 
 # Service Accounts
 
-**Note**: Service accounts only work for Google Apps accounts. With a regular @gmail.com google account, you'll need an "Installed Application". To make this easier, some folks have created [google-oauth2-installed](https://github.com/carnesmedia/google-oauth2-installed).
+**Note**: Service accounts only work for Google Apps accounts. With a regular @gmail.com google account, you'll need an "Installed Application". 
 
 ## Registering for API Access
 
