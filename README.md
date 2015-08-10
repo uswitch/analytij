@@ -22,6 +22,7 @@ You need a [service account](https://developers.google.com/console/help/?csw=1#s
 
 See [Service Accounts](https://github.com/rockBreaker/analytij/tree/readme#service-accounts).
 
+A [cost data file] (https://developers.google.com/analytics/solutions/data-import-cost?hl=en#prep). 
 ## Usage
 
 REPL
