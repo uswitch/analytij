@@ -17,11 +17,12 @@ Current functionality
   4. The upload id (which is returned when you use the upload-data fn.
 
 
-## Usage
-
+## Prerequisites
 You need a [service account](https://developers.google.com/console/help/?csw=1#service_accounts) to use analytij.
  
-Instructions copied/inspired from [legato](https://github.com/tpitale/legato/wiki/OAuth2-and-Google#service-accounts) *Awaiting approval*
+## Usage
+
+
 
 #Terminology
 - *G.A*                    - [Google analytics](https://www.google.co.uk/analytics/)
@@ -32,6 +33,7 @@ Instructions copied/inspired from [legato](https://github.com/tpitale/legato/wik
 - *cost-data-file*         - This is your csv file containing your cost data.
 
 # Service Accounts
+Instructions copied/inspired from [legato](https://github.com/tpitale/legato/wiki/OAuth2-and-Google#service-accounts) *Approval Given*
 
 **Note**: Service accounts only work for Google Apps accounts. With a regular @gmail.com google account, you'll need an "Installed Application". 
 
