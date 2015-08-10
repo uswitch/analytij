@@ -13,6 +13,14 @@ You need a [service account](https://developers.google.com/console/help/?csw=1#s
  
 Instructions copied/inspired from [legato](https://github.com/tpitale/legato/wiki/OAuth2-and-Google#service-accounts) *Awaiting approval*
 
+#Terminology
+ *G.A*                          - [Google analytics](https://www.google.co.uk/analytics/)
+ *analytics-service*            - This is created by the function service. 
+ *account-id*                   - This is your google analytics account id (you can see this in Account Settings in G.A)
+ *property-id*                  - This is the property id listed inside G.A admin tab when you click on the property you want. 
+ *custom-data-source-id*        - This is created when you click on Data import in the property section
+ *cost-data-file*               - This is your csv file containing your cost data.
+
 # Service Accounts
 
 **Note**: Service accounts only work for Google Apps accounts. With a regular @gmail.com google account, you'll need an "Installed Application". 
