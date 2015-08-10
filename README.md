@@ -19,7 +19,9 @@ Current functionality
 
 ## Prerequisites
 You need a [service account](https://developers.google.com/console/help/?csw=1#service_accounts) to use analytij.
- 
+
+See [Service Accounts](https://github.com/rockBreaker/analytij/tree/readme#service-accounts).
+
 ## Usage
 
 
@@ -33,7 +35,7 @@ You need a [service account](https://developers.google.com/console/help/?csw=1#s
 - *cost-data-file*         - This is your csv file containing your cost data.
 
 # Service Accounts
-Instructions copied/inspired from [legato](https://github.com/tpitale/legato/wiki/OAuth2-and-Google#service-accounts) *Approval Given*
+Instructions copied/inspired from [legato](https://github.com/tpitale/legato/wiki/OAuth2-and-Google#service-accounts) (*Approval Given*)
 
 **Note**: Service accounts only work for Google Apps accounts. With a regular @gmail.com google account, you'll need an "Installed Application". 
 
