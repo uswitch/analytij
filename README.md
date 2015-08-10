@@ -11,7 +11,7 @@ Current functionality
 
 You need a [service account](https://developers.google.com/console/help/?csw=1#service_accounts) to use analytij.
  
-Instructions copied from [legato](https://github.com/tpitale/legato/wiki/OAuth2-and-Google#service-accounts
+Instructions copied/inspired from [legato](https://github.com/tpitale/legato/wiki/OAuth2-and-Google#service-accounts
 
 # Service Accounts
 
