@@ -9,7 +9,8 @@
             :metrics                      [s/Str]
             :view-id                      #"ga\:\d+"
             (s/optional-key :max-results) s/Num
-            (s/optional-key :dimensions)  [#"ga:\w+"]})
+            (s/optional-key :dimensions)  [#"ga:\w+"]
+            (s/optional-key :filters)     s/Str})
 
 (def date-format (SimpleDateFormat. "yyyy-MM-dd"))
 
@@ -52,7 +53,7 @@
   - sort
   - filters
   - max results"
-  [service {:keys [start-date end-date dimensions metrics view-id] :as query}]
+  [service {:keys [start-date end-date dimensions filters metrics view-id] :as query}]
   {:pre [(s/validate Query query)]}
   (let [data (.. service data ga)
         q    (.get data
@@ -62,4 +63,6 @@
                    (st/join "," metrics))]
     (when dimensions
       (.setDimensions q (st/join "," dimensions)))
+    (when filters
+      (.setFilters q filters))
     (results->map (.execute q))))
