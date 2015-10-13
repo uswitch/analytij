@@ -65,4 +65,5 @@
       (.setDimensions q (st/join "," dimensions)))
     (when filters
       (.setFilters q filters))
+    (.setMaxResults q (int 10000))
     (results->map (.execute q))))
