@@ -66,7 +66,8 @@
                 (when dimensions
                   (.setDimensions q (st/join "," dimensions)))
                 (when filters
-                  (.setFilters q filters))))]
+                  (.setFilters q filters))
+                q))]
       (let [gadata        (.execute (build-query 1))
             headers       (.getColumnHeaders gadata)
             total-results (.getTotalResults gadata)
