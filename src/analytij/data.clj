@@ -2,7 +2,8 @@
   (:require [schema.core :as s]
             [clojure.string :as st])
   (:import [java.text SimpleDateFormat]
-           [com.google.api.services.analytics.model GaData]))
+           [com.google.api.services.analytics.model GaData]
+           [java.math BigDecimal]))
 
 (def Query {:start-date                   s/Inst
             :end-date                     s/Inst
@@ -19,6 +20,7 @@
 
 (defn coerce-val [t val]
   (condp = t
+    "CURRENCY" (BigDecimal. val)
     "INTEGER" (Integer/valueOf val)
     "STRING"  val))
 
