@@ -11,7 +11,7 @@ Most Google Analytics APIs like the Core Reporting API come for many
 languages, but mostly the Java, Python and PHP versions are
 mature. All other languages are either in Alpha or Beta state.
 
-analytij is a wrapper over a stble and current version of the Java
+analytij is a wrapper over a stable and current version of the Java
 library and adds a thin layer of Clojure abstraction over it. This
 makes the APIs easy to read and very accessible to testing using
 REPL-driven development.
