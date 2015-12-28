@@ -1,5 +1,9 @@
 ;;;; This file shows query examples for the Google Analytics Core
 ;;;; Reporting API.
+
+;;;; For these examples to run, please follow Step 1 of the Google
+;;;; Analytics Core Reporting Java API documentation:
+;;;; https://developers.google.com/analytics/devguides/reporting/core/v3/quickstart/service-java
 (ns analytics-examples.core)
 
 (use 'analytij.auth)
@@ -7,6 +11,7 @@
 (use 'analytij.management)
 
 ;;; General setup
+
 (def service-account-id "vr-ga-123@organic-spirit-123.iam.gserviceaccount.com")
 
 (def ga-service (service service-account-id "client_secrets.p12"))
