@@ -22,8 +22,8 @@
   (condp = t
     "CURRENCY" (BigDecimal. val)
     "INTEGER" (Integer/valueOf val)
-    "PERCENT" (BigDecimal. val)
-    "TIME" (BigDecimal. val)
+    "PERCENT" (Float/valueOf val)
+    "TIME" (Float/valueOf val)
     "FLOAT" (Float/valueOf val)
     "STRING" val
     val))
@@ -52,6 +52,7 @@
   - start date
   - end date
   - metrics
+  - view id
 
   It may also have
   - dimensions
