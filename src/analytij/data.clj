@@ -21,8 +21,12 @@
 (defn coerce-val [t val]
   (condp = t
     "CURRENCY" (BigDecimal. val)
-    "INTEGER" (Integer/valueOf val)
-    "STRING"  val))
+    "INTEGER"  (Integer/valueOf val)
+    "PERCENT"  (Float/valueOf val)
+    "TIME"     (Float/valueOf val)
+    "FLOAT"    (Float/valueOf val)
+    "STRING"   val
+    val))
 
 (defn coerce-cell [{:strs [name columnType dataType]} val]
   {:name        name
