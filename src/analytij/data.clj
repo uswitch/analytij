@@ -65,7 +65,7 @@
   - sort
   - filters
   - max results"
-  [service {:keys [start-date end-date dimensions filters metrics view-id] :as query} page-handler]
+  [service {:keys [start-date end-date dimensions filters metrics view-id max-results] :as query} page-handler]
   {:pre [(s/validate Query query)]}
   (let [data (.. service data ga)]
     (letfn [(build-query [start-index]
@@ -74,7 +74,7 @@
                             (date-str start-date)
                             (date-str end-date)
                             (st/join "," metrics))]
-                (.setMaxResults q (int 10000))
+                (.setMaxResults q (int (or max-results 10000)))
                 (.setStartIndex q (int start-index))
                 (when dimensions
                   (.setDimensions q (st/join "," dimensions)))
