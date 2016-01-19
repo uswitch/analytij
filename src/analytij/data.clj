@@ -22,7 +22,11 @@
   (condp = t
     "CURRENCY" (BigDecimal. val)
     "INTEGER" (Integer/valueOf val)
-    "STRING"  val))
+    "PERCENT" (Float/valueOf val)
+    "TIME" (Float/valueOf val)
+    "FLOAT" (Float/valueOf val)
+    "STRING" val
+    val))
 
 (defn coerce-cell [{:strs [name columnType dataType]} val]
   {:name        name
@@ -59,6 +63,7 @@
   - start date
   - end date
   - metrics
+  - view id
 
   It may also have
   - dimensions
