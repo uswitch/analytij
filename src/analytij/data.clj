@@ -44,15 +44,14 @@
    :records  (parse-records (.getColumnHeaders gadata) (.getRows gadata))})
 
 (defn collect-records-handler
-  "Default collector - appends records to results.
-   Returns vector of [results new-records]"
-  [results new-records]
-  [(update-in results [:records] concat new-records) new-records])
+  "Default collector - appends records to results. Arguments come in a vector"
+  [[results new-records]]
+  (update-in results [:records] concat new-records))
 
 (defn update-processed-record-count
   "Update the :processed count in results"
-  [[results new-records]]
-  (update-in results [:processed] + (count new-records)))
+  [results new-records]
+  [(update-in results [:processed] + (count new-records)) new-records])
 
 (defn execute
   "Fetches data. Query must have:
@@ -89,7 +88,7 @@
                      :sampled?      (.getContainsSampledData gadata)
                      :processed 0
                      :records []}
-            counting-handler (comp update-processed-record-count page-handler)]
+            counting-handler (comp page-handler update-processed-record-count)]
 
         (loop [res (counting-handler results (->> gadata (.getRows) (parse-records headers)))]
           (if (> total-results (:processed res))
