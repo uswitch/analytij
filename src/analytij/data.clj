@@ -46,17 +46,6 @@
    :sampled? (.getContainsSampledData gadata)
    :records  (parse-records (.getColumnHeaders gadata) (.getRows gadata))})
 
-(defn collect-records-handler
-  "Default collector - appends records to results.
-   Returns vector of [results new-records]"
-  [results new-records]
-  [(update-in results [:records] concat new-records) new-records])
-
-(defn update-processed-record-count
-  "Update the :processed count in results"
-  [[results new-records]]
-  (update-in results [:processed] + (count new-records)))
-
 (defn execute
   "Fetches data. Query must have:
   - start date
@@ -69,7 +58,7 @@
   - sort
   - filters
   - max results"
-  [service {:keys [start-date end-date dimensions filters metrics view-id max-results] :as query} page-handler]
+  [service {:keys [start-date end-date dimensions filters metrics view-id max-results] :as query}]
   {:pre [(s/validate Query query)]}
   (let [data (.. service data ga)]
     (letfn [(build-query [start-index]
@@ -90,15 +79,12 @@
             total-results (.getTotalResults gadata)
             results {:total-results total-results
                      :columns       headers
-                     :sampled?      (.getContainsSampledData gadata)
-                     :processed 0
-                     :records []}
-            counting-handler (comp update-processed-record-count page-handler)]
+                     :sampled?      (.getContainsSampledData gadata)}]
 
-        (loop [res (counting-handler results (->> gadata (.getRows) (parse-records headers)))]
-          (if (> total-results (:processed res))
-            (recur (counting-handler res
-                           (->> (.execute (build-query (inc (:processed res))))
+        (loop [records (->> gadata (.getRows) (parse-records headers))]
+          (if (> total-results (count records))
+            (recur (concat records
+                           (->> (.execute (build-query (inc (count records))))
                                 (.getRows)
                                 (parse-records headers)))) ;paginate
-            res))))))
+            (assoc results :records records)))))))
