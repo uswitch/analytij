@@ -1,8 +1,9 @@
 (ns analytij.data
   (:require [schema.core :as s]
-            [clojure.string :as st])
-  (:import [java.text SimpleDateFormat]
-           [com.google.api.services.analytics.model GaData]
+            [clojure.string :as st]
+            [clj-time.format :as f]
+            [clj-time.coerce :as c])
+  (:import [com.google.api.services.analytics.model GaData]
            [java.math BigDecimal]))
 
 (def Query {:start-date                   s/Inst
@@ -13,10 +14,8 @@
             (s/optional-key :dimensions)  [#"ga:\w+"]
             (s/optional-key :filters)     s/Str})
 
-(def date-format (SimpleDateFormat. "yyyy-MM-dd"))
-
 (defn- date-str [dt]
-  (.format date-format dt))
+  (->> dt (c/from-date) (f/unparse (f/formatter "yyyy-MM-dd"))))
 
 (defn coerce-val [t val]
   (condp = t
