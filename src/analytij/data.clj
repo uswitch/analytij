@@ -1,8 +1,9 @@
 (ns analytij.data
   (:require [schema.core :as s]
-            [clojure.string :as st])
-  (:import [java.text SimpleDateFormat]
-           [com.google.api.services.analytics.model GaData]
+            [clojure.string :as st]
+            [clj-time.format :as f]
+            [clj-time.coerce :as c])
+  (:import [com.google.api.services.analytics.model GaData]
            [java.math BigDecimal]))
 
 (def Query {:start-date                   s/Inst
@@ -13,16 +14,18 @@
             (s/optional-key :dimensions)  [#"ga:\w+"]
             (s/optional-key :filters)     s/Str})
 
-(def date-format (SimpleDateFormat. "yyyy-MM-dd"))
-
 (defn- date-str [dt]
-  (.format date-format dt))
+  (->> dt (c/from-date) (f/unparse (f/formatter "yyyy-MM-dd"))))
 
 (defn coerce-val [t val]
   (condp = t
     "CURRENCY" (BigDecimal. val)
     "INTEGER" (Integer/valueOf val)
-    "STRING"  val))
+    "PERCENT" (Float/valueOf val)
+    "TIME" (Float/valueOf val)
+    "FLOAT" (Float/valueOf val)
+    "STRING" val
+    val))
 
 (defn coerce-cell [{:strs [name columnType dataType]} val]
   {:name        name
@@ -48,13 +51,14 @@
   - start date
   - end date
   - metrics
+  - view id
 
   It may also have
   - dimensions
   - sort
   - filters
   - max results"
-  [service {:keys [start-date end-date dimensions filters metrics view-id] :as query}]
+  [service {:keys [start-date end-date dimensions filters metrics view-id max-results] :as query}]
   {:pre [(s/validate Query query)]}
   (let [data (.. service data ga)]
     (letfn [(build-query [start-index]
@@ -63,7 +67,7 @@
                             (date-str start-date)
                             (date-str end-date)
                             (st/join "," metrics))]
-                (.setMaxResults q (int 10000))
+                (.setMaxResults q (int (or max-results 10000)))
                 (.setStartIndex q (int start-index))
                 (when dimensions
                   (.setDimensions q (st/join "," dimensions)))
