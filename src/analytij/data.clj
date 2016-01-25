@@ -48,6 +48,7 @@
   - start date
   - end date
   - metrics
+  - view-id
 
   It may also have
   - dimensions

@@ -1,18 +1,17 @@
 # analytij
 
-Clojure library for accessing the Google Analytics API.
+Clojure library for accessing the Google Analytics reporting and management API.
 
-## Usage
+* [Core Reporting API](https://developers.google.com/analytics/devguides/reporting/core/v3/).
+* [Management API](https://developers.google.com/analytics/devguides/config/mgmt/v3/mgmtReference/)
 
-```clojure
-(use 'analytij.auth)
-(use 'analytij.management)
+Although analytij aims to make the API more pleasant to use (than its Java or other equivalents) their query explorer is still really useful while developing data queries:
 
-(def service-account-id "XXX@developer.gserviceaccount.com")
+* [Google Query explorer](https://ga-dev-tools.appspot.com/query-explorer/)
 
-(def s (service service-account-id "./path-to-creds.p12"))
+## Example
 
-```
+Please see the query example [doc/examples](doc/examples) to get started.
 
 ## License
 
