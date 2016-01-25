@@ -20,11 +20,11 @@
 (defn coerce-val [t val]
   (condp = t
     "CURRENCY" (BigDecimal. val)
-    "INTEGER" (Integer/valueOf val)
-    "PERCENT" (Float/valueOf val)
-    "TIME" (Float/valueOf val)
-    "FLOAT" (Float/valueOf val)
-    "STRING" val
+    "INTEGER"  (Integer/valueOf val)
+    "PERCENT"  (Float/valueOf val)
+    "TIME"     (Float/valueOf val)
+    "FLOAT"    (Float/valueOf val)
+    "STRING"   val
     val))
 
 (defn coerce-cell [{:strs [name columnType dataType]} val]
@@ -51,14 +51,14 @@
   - start date
   - end date
   - metrics
-  - view id
+  - view-id
 
   It may also have
   - dimensions
   - sort
   - filters
   - max results"
-  [service {:keys [start-date end-date dimensions filters metrics view-id max-results] :as query}]
+  [service {:keys [start-date end-date dimensions filters metrics view-id max-results] :as query} page-handler]
   {:pre [(s/validate Query query)]}
   (let [data (.. service data ga)]
     (letfn [(build-query [start-index]
