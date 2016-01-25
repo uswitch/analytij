@@ -1,43 +1,17 @@
 # analytij
 
-Clojure library for accessing the Google Analytics API, for example
-the
-[Core Reporting API](https://developers.google.com/analytics/devguides/reporting/core/v3/). Google
-Analytics does not expose - or rather document - a public HTTP API, but 
-implements their own clients in
-[various programming languages](https://developers.google.com/analytics/devguides/reporting/core/v3/gdataLibraries).
+Clojure library for accessing the Google Analytics reporting and management API.
 
-Most Google Analytics APIs like the Core Reporting API come for many
-languages, but mostly the Java, Python and PHP versions are
-mature. All other languages are either in Alpha or Beta state.
+* [Core Reporting API](https://developers.google.com/analytics/devguides/reporting/core/v3/).
+* [Management API](https://developers.google.com/analytics/devguides/config/mgmt/v3/mgmtReference/)
 
-analytij is a wrapper over a stable and current version of the Java
-library and adds a thin layer of Clojure abstraction over it. This
-makes the APIs easy to read and very accessible to testing using
-REPL-driven development.
+Although analytij aims to make the API more pleasant to use (than its Java or other equivalents) their query explorer is still really useful while developing data queries:
 
-If you are unfamiliar with the Google Analytics API and its
-parameters, use the
-[Google Query explorer](https://ga-dev-tools.appspot.com/query-explorer/)
-which is a web interface to different kinds of Google Analytics APIs
-where you can easily test out different kinds of queries and
-parameters.
+* [Google Query explorer](https://ga-dev-tools.appspot.com/query-explorer/)
 
-## Usage
+## Example
 
-```clojure
-(use 'analytij.auth)
-(use 'analytij.management)
-
-(def service-account-id "XXX@developer.gserviceaccount.com")
-
-(def s (service service-account-id "./path-to-creds.p12"))
-
-```
-
-## Examples
-
-Please see code examples in the [doc/examples](doc/examples) folder.
+Please see the query example [doc/examples](doc/examples) to get started.
 
 ## License
 
