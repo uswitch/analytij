@@ -46,6 +46,28 @@
    :sampled? (.getContainsSampledData gadata)
    :records  (parse-records (.getColumnHeaders gadata) (.getRows gadata))})
 
+(defn- lazy-query
+  [headers total resp query]
+  (letfn [(paginate [q]
+            (lazy-seq
+              (let [current (.getStartIndex q)
+                    step (.getMaxResults q)
+                    next-query (doto q (.setStartIndex (int (+ current step))))]
+                (when (pos? (- total current))
+                  (concat (parse-records headers (.getRows (.execute next-query))) (paginate next-query))))))]
+    (concat (parse-records headers (.getRows resp)) (paginate query))))
+
+(defn- parse
+  [query]
+  (let [response (.execute query)
+        headers (.getColumnHeaders response)
+        total-results (.getTotalResults response)
+        sampled? (.getContainsSampledData response)]
+    {:total-results total-results
+     :columns       headers
+     :sampled?      sampled?
+     :records       (lazy-query headers total-results response query)}))
+
 (defn execute
   "Fetches data. Query must have:
   - start date
@@ -60,31 +82,18 @@
   - max results"
   [service {:keys [start-date end-date dimensions filters metrics view-id max-results] :as query}]
   {:pre [(s/validate Query query)]}
-  (let [data (.. service data ga)]
-    (letfn [(build-query [start-index]
-              (let [q (.get data
-                            view-id
-                            (date-str start-date)
-                            (date-str end-date)
-                            (st/join "," metrics))]
-                (.setMaxResults q (int (or max-results 10000)))
-                (.setStartIndex q (int start-index))
-                (when dimensions
-                  (.setDimensions q (st/join "," dimensions)))
-                (when filters
-                  (.setFilters q filters))
-                q))]
-      (let [gadata        (.execute (build-query 1))
-            headers       (.getColumnHeaders gadata)
-            total-results (.getTotalResults gadata)
-            results {:total-results total-results
-                     :columns       headers
-                     :sampled?      (.getContainsSampledData gadata)}]
-
-        (loop [records (->> gadata (.getRows) (parse-records headers))]
-          (if (> total-results (count records))
-            (recur (concat records
-                           (->> (.execute (build-query (inc (count records))))
-                                (.getRows)
-                                (parse-records headers)))) ;paginate
-            (assoc results :records records)))))))
+  (let [data (.. service data ga)
+        q (.get data
+                view-id
+                (date-str start-date)
+                (date-str end-date)
+                (st/join "," metrics))
+        max-rs (int (or max-results 10000))
+        qry (doto q
+              (.setMaxResults max-rs)
+              (.setStartIndex (int 1)))]
+    (when dimensions
+      (.setDimensions qry (st/join "," dimensions)))
+    (when filters
+      (.setFilters qry filters))
+    (parse qry)))
