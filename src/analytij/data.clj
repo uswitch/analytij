@@ -4,6 +4,7 @@
             [clj-time.format :as f]
             [clj-time.coerce :as c])
   (:import [com.google.api.services.analytics.model GaData]
+           [com.google.api.services.analytics Analytics$Data$Ga$Get]
            [java.math BigDecimal]))
 
 (def Query {:start-date                   s/Inst
@@ -47,8 +48,8 @@
    :records  (parse-records (.getColumnHeaders gadata) (.getRows gadata))})
 
 (defn- lazy-query
-  [headers total resp query]
-  (letfn [(paginate [q]
+  [headers total ^GaData resp ^Analytics$Data$Ga$Get query]
+  (letfn [(paginate [^Analytics$Data$Ga$Get q]
             (lazy-seq
               (let [current (.getStartIndex q)
                     step (.getMaxResults q)
@@ -58,7 +59,7 @@
     (concat (parse-records headers (.getRows resp)) (paginate query))))
 
 (defn- parse
-  [query]
+  [^Analytics$Data$Ga$Get query]
   (let [response (.execute query)
         headers (.getColumnHeaders response)
         total-results (.getTotalResults response)
