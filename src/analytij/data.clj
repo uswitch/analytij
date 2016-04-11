@@ -3,7 +3,7 @@
             [clojure.string :as st]
             [clj-time.format :as f]
             [clj-time.coerce :as c])
-  (:import [com.google.api.services.analytics.model GaData]
+  (:import [com.google.api.services.analytics.model GaData UnsampledReport]
            [java.math BigDecimal]))
 
 (def Query {:start-date                   s/Inst
@@ -88,3 +88,35 @@
                                 (.getRows)
                                 (parse-records headers)))) ;paginate
             (assoc results :records records)))))))
+
+
+(defn unsampled
+  [service {:keys [start-date end-date dimensions filters metrics property-id view-id] :as query}]
+  (let [data (.. service data ga)
+        r    (.new UnsampledReport)]
+    (.setStartDate   r (date-str start-date))
+    (.setEndDate     r (date-str end-date))
+
+    (when dimensions
+      (.setDimensions r (st/join "," dimensions)))
+
+    (when filters
+      (.setFilters r filters))
+
+    (let [insert-request (-> service
+                             (.management)
+                             (.unsampledReports)
+                             (.insert (.getAccountId service)
+                                      property-id
+                                      view-id
+                                      r))]
+
+      (let [gadata        (.execute insert-request)
+            headers       (.getColumnHeaders gadata)
+            total-results (.getTotalResults gadata)
+            results {:total-results total-results
+                     :columns       headers}]
+
+        (->> gadata
+             (.getRows)
+             (parse-records headers))))))
