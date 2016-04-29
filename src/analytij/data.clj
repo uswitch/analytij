@@ -3,7 +3,7 @@
             [clojure.string :as st]
             [clj-time.format :as f]
             [clj-time.coerce :as c])
-  (:import [com.google.api.services.analytics.model GaData UnsampledReport]
+  (:import [com.google.api.services.analytics.model GaData UnsampledReport UnsampledReport$CloudStorageDownloadDetails]
            [java.math BigDecimal]))
 
 (def Query {:start-date                   s/Inst
@@ -90,33 +90,57 @@
             (assoc results :records records)))))))
 
 
-(defn unsampled
-  [service {:keys [start-date end-date dimensions filters metrics property-id view-id] :as query}]
-  (let [data (.. service data ga)
-        r    (.new UnsampledReport)]
-    (.setStartDate   r (date-str start-date))
-    (.setEndDate     r (date-str end-date))
-
+(comment
+   (.setCloudStorageDownloadDetails r download)
+    (.setDownloadType r "CLOUD_STORAGE"))
+<
+(defn create-unsampled-report
+  [service title {:keys [start-date end-date dimensions filters metrics account-id property-id view-id bucket object] :as query}]
+  (let [r (UnsampledReport.)
+        download (doto (UnsampledReport$CloudStorageDownloadDetails. )
+                   (.setBucketId bucket)
+                   (.setObjectId object))]
+    (.setTitle     r title)
+    (.setStartDate r (date-str start-date))
+    (.setEndDate   r (date-str end-date))
+    (when metrics
+      (.setMetrics r (st/join "," metrics)))
     (when dimensions
       (.setDimensions r (st/join "," dimensions)))
-
     (when filters
       (.setFilters r filters))
-
     (let [insert-request (-> service
                              (.management)
                              (.unsampledReports)
-                             (.insert (.getAccountId service)
+                             (.insert account-id
                                       property-id
                                       view-id
                                       r))]
+      (let [result (.execute insert-request)]
+        {:created-at (.getCreated result)
+         :status     (.getStatus result)
+         :title      (.getTitle result)
+         :id         (.getId result)}))))
 
-      (let [gadata        (.execute insert-request)
-            headers       (.getColumnHeaders gadata)
-            total-results (.getTotalResults gadata)
-            results {:total-results total-results
-                     :columns       headers}]
+(defn status-unsampled-report
+  [service {:keys [account-id property-id view-id report-id]}]
+  (let [x   (.. service management unsampledReports)
+        req (.get x account-id property-id view-id report-id)]
+    (let [report (.execute req)]
+      {:title                          (.getTitle report)
+       :status                         (.getStatus report)
+       :type                           (.getDownloadType report)
+       :id                             (.getId report)
+       :drive-download-details         {:document-id (->> report
+                                                          .getDriveDownloadDetails
+                                                          .getDocumentId)}})))
 
-        (->> gadata
-             (.getRows)
-             (parse-records headers))))))
+(defn download-unsampled-report
+  [service {:keys [account-id property-id view-id report-id]}]
+  (let [x           (.. service management unsampledReports)
+        req         (.get x account-id property-id view-id report-id)
+        report      (.execute req)
+        document-id (->> report
+                         .getDriveDownloadDetails
+                         .getDocumentId)]
+    (str "http://www.googleapis.com/drive/v2/files/" document-id "?alt=media")))

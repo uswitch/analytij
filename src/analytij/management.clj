@@ -33,3 +33,13 @@
 (defn upload-status [analytics-service account-id property-id data-source-id upload-id]
   (let [uploads (.. analytics-service management uploads)]
     (upload-status->map (.execute (.get uploads account-id property-id data-source-id upload-id)))))
+
+
+
+(defn accounts
+  [service]
+  (let [list-request (.. service management accounts list)]
+    (->> (get (.execute list-request) "items")
+         (map (fn [result]
+                {:id   (.getId result)
+                 :name (.getName result)})))))

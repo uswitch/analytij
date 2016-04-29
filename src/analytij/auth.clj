@@ -32,3 +32,20 @@
                                           (request-initializer creds read-timeout-ms))
                     (.setApplicationName "Analytij"))]
     (.build analytics)))
+
+
+(defn drive-credentials
+  []
+  (let [credential (doto (GoogleCredential$Builder. )
+                     (.setTransport (GoogleNetHttpTransport/newTrustedTransport))
+                     (.setJsonFactory (JacksonFactory. ))
+                     (.setServiceAccountId account-id)
+                     (.setServiceAccountScopes [AnalyticsScopes/ANALYTICS])
+                     (.setServiceAccountPrivateKeyFromP12File (io/file private-key-file)))]
+    (.build credential)))
+
+(defn drive-service
+  []
+  (Drive$Builder. (GoogleNetHttpTransport/newTrustedTransport)
+                  (JacksonFactory/getDefaultInstance)
+                  (drive-credentials )))
