@@ -126,21 +126,11 @@
   [service {:keys [account-id property-id view-id report-id]}]
   (let [x   (.. service management unsampledReports)
         req (.get x account-id property-id view-id report-id)]
-    (let [report (.execute req)]
-      {:title                          (.getTitle report)
-       :status                         (.getStatus report)
-       :type                           (.getDownloadType report)
-       :id                             (.getId report)
-       :drive-download-details         {:document-id (->> report
-                                                          .getDriveDownloadDetails
-                                                          .getDocumentId)}})))
-
-(defn download-unsampled-report
-  [service {:keys [account-id property-id view-id report-id]}]
-  (let [x           (.. service management unsampledReports)
-        req         (.get x account-id property-id view-id report-id)
-        report      (.execute req)
-        document-id (->> report
-                         .getDriveDownloadDetails
-                         .getDocumentId)]
-    (str "http://www.googleapis.com/drive/v2/files/" document-id "?alt=media")))
+    (let [report           (.execute req)
+          download-details (.getCloudStorageDownloadDetails report)]
+      {:title                    (.getTitle report)
+       :status                   (.getStatus report)
+       :type                     (.getDownloadType report)
+       :id                       (.getId report)
+       :download-details         {:object-id (.getObjectId download-details)
+                                  :bucket-id (.getBucketId download-details)}})))
