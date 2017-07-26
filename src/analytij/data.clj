@@ -3,7 +3,7 @@
             [clojure.string :as st]
             [clj-time.format :as f]
             [clj-time.coerce :as c])
-  (:import [com.google.api.services.analytics.model GaData]
+  (:import [com.google.api.services.analytics.model GaData UnsampledReport UnsampledReport$CloudStorageDownloadDetails]
            [java.math BigDecimal]))
 
 (def Query {:start-date                   s/Inst
@@ -88,3 +88,49 @@
                                 (.getRows)
                                 (parse-records headers)))) ;paginate
             (assoc results :records records)))))))
+
+
+(comment
+   (.setCloudStorageDownloadDetails r download)
+    (.setDownloadType r "CLOUD_STORAGE"))
+<
+(defn create-unsampled-report
+  [service title {:keys [start-date end-date dimensions filters metrics account-id property-id view-id bucket object] :as query}]
+  (let [r (UnsampledReport.)
+        download (doto (UnsampledReport$CloudStorageDownloadDetails. )
+                   (.setBucketId bucket)
+                   (.setObjectId object))]
+    (.setTitle     r title)
+    (.setStartDate r (date-str start-date))
+    (.setEndDate   r (date-str end-date))
+    (when metrics
+      (.setMetrics r (st/join "," metrics)))
+    (when dimensions
+      (.setDimensions r (st/join "," dimensions)))
+    (when filters
+      (.setFilters r filters))
+    (let [insert-request (-> service
+                             (.management)
+                             (.unsampledReports)
+                             (.insert account-id
+                                      property-id
+                                      view-id
+                                      r))]
+      (let [result (.execute insert-request)]
+        {:created-at (.getCreated result)
+         :status     (.getStatus result)
+         :title      (.getTitle result)
+         :id         (.getId result)}))))
+
+(defn status-unsampled-report
+  [service {:keys [account-id property-id view-id report-id]}]
+  (let [x   (.. service management unsampledReports)
+        req (.get x account-id property-id view-id report-id)]
+    (let [report           (.execute req)
+          download-details (.getCloudStorageDownloadDetails report)]
+      {:title                    (.getTitle report)
+       :status                   (.getStatus report)
+       :type                     (.getDownloadType report)
+       :id                       (.getId report)
+       :download-details         {:object-id (.getObjectId download-details)
+                                  :bucket-id (.getBucketId download-details)}})))
