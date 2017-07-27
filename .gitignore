@@ -1,3 +1,4 @@
+
 /target
 /classes
 /checkouts
@@ -11,3 +12,4 @@ pom.xml.asc
 .hg/
 *.iml
 .idea/
+doc/examples/unsampled_report.clj
