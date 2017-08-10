@@ -4,6 +4,7 @@
             [clj-time.format :as f]
             [clj-time.coerce :as c])
   (:import [com.google.api.services.analytics.model GaData UnsampledReport UnsampledReport$CloudStorageDownloadDetails]
+           [com.google.api.services.analytics Analytics$Data$Ga$Get]
            [java.math BigDecimal]))
 
 (def Query {:start-date                   s/Inst
